@@ -1,0 +1,60 @@
+<div class="products-container">
+  <nav class="navbar">
+    <h1>QuickCart</h1>
+    <div class="nav-actions">
+      <button (click)="goToCart()">Корзина ({{ cart.length }})</button>
+      @if (isLoggedIn()) {
+        <button (click)="logout()">Выйти</button>
+      } @else {
+        <a routerLink="/login">Войти</a>
+      }
+    </div>
+  </nav>
+
+  @if (errorMessage) {
+    <div class="error">{{ errorMessage }}</div>
+  }
+
+  @if (isLoggedIn()) {
+    <div class="add-section">
+      <button (click)="showForm = !showForm">
+        {{ showForm ? 'Отмена' : '+ Добавить продукт' }}
+      </button>
+      @if (showForm) {
+        <div class="product-form">
+          <input [(ngModel)]="newProduct.name" placeholder="Название" />
+          <input [(ngModel)]="newProduct.description" placeholder="Описание" />
+          <input [(ngModel)]="newProduct.price" placeholder="Цена" type="number" />
+          <input [(ngModel)]="newProduct.stock" placeholder="Количество" type="number" />
+          <select [(ngModel)]="newProduct.category">
+            <option value="0">Выберите категорию</option>
+            @for (cat of categories; track cat.id) {
+              <option [value]="cat.id">{{ cat.name }}</option>
+            }
+          </select>
+          <button (click)="createProduct()">Сохранить</button>
+        </div>
+      }
+    </div>
+  }
+
+  <div class="products-grid">
+    @for (product of products; track product.id) {
+      <div class="product-card">
+        <h3>{{ product.name }}</h3>
+        <p>{{ product.description }}</p>
+        <p class="price">{{ product.price }} ₸</p>
+        <p class="stock">В наличии: {{ product.stock }}</p>
+        <p class="category">{{ product.category_name }}</p>
+        <div class="card-actions">
+          <button (click)="addToCart(product)">В корзину</button>
+          @if (isLoggedIn()) {
+            <button (click)="deleteProduct(product.id!)">Удалить</button>
+          }
+        </div>
+      </div>
+    } @empty {
+      <p>Продукты не найдены</p>
+    }
+  </div>
+</div>

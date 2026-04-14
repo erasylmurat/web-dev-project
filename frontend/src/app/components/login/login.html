@@ -1,0 +1,19 @@
+<div class="auth-container">
+  <h2>{{ isRegister ? 'Регистрация' : 'Вход' }}</h2>
+
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+  <input [(ngModel)]="username" placeholder="Логин" type="text" />
+
+  <input *ngIf="isRegister" [(ngModel)]="email" placeholder="Email" type="email" />
+
+  <input [(ngModel)]="password" placeholder="Пароль" type="password" />
+
+  <button (click)="isRegister ? register() : login()">
+    {{ isRegister ? 'Зарегистрироваться' : 'Войти' }}
+  </button>
+
+  <p (click)="toggleMode()" class="toggle-link">
+    {{ isRegister ? 'Уже есть аккаунт? Войти' : 'Нет аккаунта? Зарегистрироваться' }}
+  </p>
+</div>

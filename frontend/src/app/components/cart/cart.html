@@ -1,0 +1,30 @@
+<div class="cart-container">
+  <nav class="navbar">
+    <h1>Корзина</h1>
+    <button (click)="goBack()">← Назад</button>
+  </nav>
+
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+  <div *ngIf="successMessage" class="success">{{ successMessage }}</div>
+
+  @if (cartItems.length === 0) {
+    <p class="empty">Корзина пуста</p>
+  } @else {
+    <div class="cart-items">
+      @for (item of cartItems; track item.id) {
+        <div class="cart-item">
+          <div class="item-info">
+            <h3>{{ item.name }}</h3>
+            <p>{{ item.price }} ₸</p>
+          </div>
+          <button (click)="removeItem($index)">Удалить</button>
+        </div>
+      }
+    </div>
+
+    <div class="cart-total">
+      <h3>Итого: {{ getTotal() }} ₸</h3>
+      <button class="order-btn" (click)="placeOrder()">Оформить заказ</button>
+    </div>
+  }
+</div>
