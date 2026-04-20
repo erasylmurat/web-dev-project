@@ -150,14 +150,24 @@ class ReviewListCreateView(APIView):
         return Response(serializer.data)
 
     def post(self, request, pk):
-        if not request.user.is_authenticated:
-            return Response({'error': 'Требуется авторизация'}, status=401)
-        try:
-            product = Product.objects.get(pk=pk)
-        except Product.DoesNotExist:
-            return Response({'error': 'Not found'}, status=404)
-        serializer = ReviewSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(user=request.user, product=product)
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=400)
+      if not request.user.is_authenticated:
+          return Response({'error': 'Требуется авторизация'}, status=401)
+      try:
+          product = Product.objects.get(pk=pk)
+      except Product.DoesNotExist:
+          return Response({'error': 'Not found'}, status=404)
+    
+      # Проверяем покупал ли пользователь этот товар
+      has_purchased = OrderItem.objects.filter(
+          order__user=request.user,
+          product=product
+      ).exists()
+    
+      if not has_purchased:
+        return Response({'error': 'Вы можете оставить отзыв только после покупки'}, status=403)
+    
+      serializer = ReviewSerializer(data=request.data)
+      if serializer.is_valid():
+        serializer.save(user=request.user, product=product)
+        return Response(serializer.data, status=201)
+      return Response(serializer.errors, status=400)

@@ -15,11 +15,32 @@
 
   <div class="categories-content">
     <h2>{{ tr.t('categories') }}</h2>
+    @if (isAdmin()) {
+        <div style="margin-bottom: 20px;">
+            <button (click)="showCategoryForm = !showCategoryForm">
+            {{ showCategoryForm ? tr.t('cancel') : '+ Добавить категорию' }}
+        </button>
+        @if (showCategoryForm) {
+        <div class="product-form" style="margin-top: 16px;">
+        <input [(ngModel)]="newCategory.name" placeholder="Название категории" />
+        <input [(ngModel)]="newCategory.description" placeholder="Описание" />
+        <input type="file" (change)="onCategoryImageSelected($event)" accept="image/*" />
+        <button (click)="createCategory()">{{ tr.t('save') }}</button>
+        </div>
+    }
+  </div>
+}
+    
     <div class="categories-grid">
       @for (cat of categories; track cat.id) {
         <div class="category-card" [routerLink]="['/products']" [queryParams]="{category: cat.id}">
+          @if (cat.image) {
+            <img [src]="getImageUrl(cat.image)" [alt]="cat.name" class="category-image" />
+          } @else {
+            <div class="category-no-image">🛍️</div>
+          }
           <h3>{{ cat.name }}</h3>
-          <p>{{ cat.description || tr.t('not_found') }}</p>
+          <p>{{ cat.description || 'Нажмите чтобы посмотреть товары' }}</p>
         </div>
       } @empty {
         <p>{{ tr.t('not_found') }}</p>
