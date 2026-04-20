@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { ApiService } from '../../services/api';
 import { Product } from '../../models/product';
+import { TranslateService } from '../../services/translate';
 
 @Component({
   selector: 'app-products',
@@ -28,7 +29,8 @@ export class Products implements OnInit {
     private api: ApiService,
     private router: Router,
     private route: ActivatedRoute,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    public tr: TranslateService
   ) {}
 
   ngOnInit() {
@@ -57,6 +59,7 @@ export class Products implements OnInit {
       error: () => this.errorMessage = 'Ошибка загрузки продуктов'
     });
   }
+  
 
   loadCategories() {
     this.api.getCategories().subscribe({
@@ -119,7 +122,10 @@ export class Products implements OnInit {
     return Array(5).fill('').map((_, i) => i < Math.round(rating) ? '★' : '☆');
   }
 
-  getImageUrl(image: string): string { return `http://127.0.0.1:8000${image}`; }
+  getImageUrl(image: string): string {
+    if (image.startsWith('http')) return image;
+    return `http://127.0.0.1:8000${image}`;
+  }
   isLoggedIn(): boolean { return !!localStorage.getItem('token'); }
   isAdmin(): boolean { return localStorage.getItem('role') === 'admin'; }
   isSeller(): boolean { return localStorage.getItem('role') === 'seller'; }

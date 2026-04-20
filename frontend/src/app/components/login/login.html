@@ -1,28 +1,36 @@
 <div class="auth-container">
-  <h2>{{ isRegister ? 'Регистрация' : 'Вход' }}</h2>
+  <div style="text-align:right; margin-bottom:8px">
+    <button (click)="tr.toggle()" style="background:#eee;color:#333;font-size:13px;padding:4px 10px">
+      {{ tr.currentLang() === 'ru' ? 'EN' : 'RU' }}
+    </button>
+  </div>
 
-  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+  <h2>{{ isRegister ? tr.t('register') : tr.t('sign_in') }}</h2>
 
-  <input [(ngModel)]="username" placeholder="Логин" type="text" />
-
-  @if (isRegister) {
-    <input [(ngModel)]="email" placeholder="Email" type="email" />
+  @if (errorMessage) {
+    <div class="error">{{ errorMessage }}</div>
   }
 
-  <input [(ngModel)]="password" placeholder="Пароль" type="password" />
+  <input [(ngModel)]="username" [placeholder]="tr.t('username')" type="text" />
+
+  @if (isRegister) {
+    <input [(ngModel)]="email" [placeholder]="tr.t('email')" type="email" />
+  }
+
+  <input [(ngModel)]="password" [placeholder]="tr.t('password')" type="password" />
 
   @if (isRegister) {
     <select [(ngModel)]="selectedRole">
-      <option value="buyer">Покупатель</option>
-      <option value="seller">Продавец</option>
+      <option value="buyer">{{ tr.t('buyer') }}</option>
+      <option value="seller">{{ tr.t('seller_role') }}</option>
     </select>
   }
 
   <button (click)="isRegister ? register() : login()">
-    {{ isRegister ? 'Зарегистрироваться' : 'Войти' }}
+    {{ isRegister ? tr.t('register_btn') : tr.t('sign_in_btn') }}
   </button>
 
   <p (click)="toggleMode()" class="toggle-link">
-    {{ isRegister ? 'Уже есть аккаунт? Войти' : 'Нет аккаунта? Зарегистрироваться' }}
+    {{ isRegister ? tr.t('have_account') : tr.t('no_account') }}
   </p>
 </div>

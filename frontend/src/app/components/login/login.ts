@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ApiService } from '../../services/api';
 import { CommonModule } from '@angular/common';
+import { TranslateService } from '../../services/translate';
 
 @Component({
   selector: 'app-login',
@@ -20,7 +21,7 @@ export class Login {
   isRegister = false;
   selectedRole = 'buyer';
 
-  constructor(private api: ApiService, private router: Router) {}
+  constructor(private api: ApiService, private router: Router, public tr: TranslateService) {}
 
   login() {
   this.api.login(this.username, this.password).subscribe({

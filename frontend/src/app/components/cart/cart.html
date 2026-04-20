@@ -1,14 +1,21 @@
 <div class="cart-container">
   <nav class="navbar">
-    <h1>Корзина</h1>
-    <button (click)="goBack()">← Назад</button>
+    <h1>{{ tr.t('quickcart') }}</h1>
+    <div class="nav-actions">
+      <button (click)="goBack()">{{ tr.t('back') }}</button>
+      <button class="lang-btn" (click)="tr.toggle()">{{ tr.currentLang() === 'ru' ? 'EN' : 'RU' }}</button>
+    </div>
   </nav>
 
-  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
-  <div *ngIf="successMessage" class="success">{{ successMessage }}</div>
+  <div style="padding: 0 32px">
+    <h2>{{ tr.t('cart_title') }}</h2>
+  </div>
+
+  @if (errorMessage) { <div class="error">{{ errorMessage }}</div> }
+  @if (successMessage) { <div class="success">{{ successMessage }}</div> }
 
   @if (cartItems.length === 0) {
-    <p class="empty">Корзина пуста</p>
+    <p class="empty">{{ tr.t('cart_empty') }}</p>
   } @else {
     <div class="cart-items">
       @for (item of cartItems; track item.id) {
@@ -17,14 +24,13 @@
             <h3>{{ item.name }}</h3>
             <p>{{ item.price }} ₸</p>
           </div>
-          <button (click)="removeItem($index)">Удалить</button>
+          <button (click)="removeItem($index)">{{ tr.t('remove') }}</button>
         </div>
       }
     </div>
-
     <div class="cart-total">
-      <h3>Итого: {{ getTotal() }} ₸</h3>
-      <button class="order-btn" (click)="placeOrder()">Оформить заказ</button>
+      <h3>{{ tr.t('total') }}: {{ getTotal() }} ₸</h3>
+      <button class="order-btn" (click)="placeOrder()">{{ tr.t('order') }}</button>
     </div>
   }
 </div>

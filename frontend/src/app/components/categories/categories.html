@@ -1,27 +1,28 @@
 <div class="categories-container">
   <nav class="navbar">
-    <h1 routerLink="/products" style="cursor:pointer">QuickCart</h1>
+    <h1 routerLink="/products" style="cursor:pointer">{{ tr.t('quickcart') }}</h1>
     <div class="nav-actions">
-      <a routerLink="/products">Все товары</a>
-      <a routerLink="/products" [queryParams]="{discount: 'true'}">Акции</a>
+      <a routerLink="/products">{{ tr.t('all_products') }}</a>
+      <a routerLink="/products" [queryParams]="{discount: 'true'}">{{ tr.t('discounts') }}</a>
       @if (isLoggedIn()) {
-        <a routerLink="/cart">Корзина</a>
+        <a routerLink="/cart">{{ tr.t('cart') }}</a>
       } @else {
-        <a routerLink="/login">Войти</a>
+        <a routerLink="/login">{{ tr.t('login') }}</a>
       }
+      <button class="lang-btn" (click)="tr.toggle()">{{ tr.currentLang() === 'ru' ? 'EN' : 'RU' }}</button>
     </div>
   </nav>
 
   <div class="categories-content">
-    <h2>Категории</h2>
+    <h2>{{ tr.t('categories') }}</h2>
     <div class="categories-grid">
       @for (cat of categories; track cat.id) {
-        <div class="category-card" routerLink="/products" [queryParams]="{category: cat.id}">
+        <div class="category-card" [routerLink]="['/products']" [queryParams]="{category: cat.id}">
           <h3>{{ cat.name }}</h3>
-          <p>{{ cat.description }}</p>
+          <p>{{ cat.description || tr.t('not_found') }}</p>
         </div>
       } @empty {
-        <p>Категории не найдены</p>
+        <p>{{ tr.t('not_found') }}</p>
       }
     </div>
   </div>

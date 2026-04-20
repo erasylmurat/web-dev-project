@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ApiService } from '../../services/api';
 import { Product } from '../../models/product';
-
+import { TranslateService } from '../../services/translate';
 @Component({
   selector: 'app-cart',
   standalone: true,
@@ -16,7 +16,7 @@ export class Cart implements OnInit {
   errorMessage = '';
   successMessage = '';
 
-  constructor(private api: ApiService, private router: Router) {}
+  constructor(private api: ApiService, private router: Router, public tr: TranslateService) {}
 
   ngOnInit() {
     const saved = localStorage.getItem('cart');

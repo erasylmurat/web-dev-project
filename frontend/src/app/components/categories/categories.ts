@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ApiService } from '../../services/api';
+import { TranslateService } from '../../services/translate';
 
 @Component({
   selector: 'app-categories',
@@ -13,7 +14,7 @@ import { ApiService } from '../../services/api';
 export class Categories implements OnInit {
   categories: any[] = [];
 
-  constructor(private api: ApiService, private cdr: ChangeDetectorRef) {}
+  constructor(private api: ApiService, private cdr: ChangeDetectorRef, public tr: TranslateService) {}
 
   ngOnInit() {
     this.api.getCategories().subscribe({

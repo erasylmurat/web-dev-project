@@ -73,6 +73,7 @@ export class ProductDetail implements OnInit {
   isLoggedIn(): boolean { return !!localStorage.getItem('token'); }
   isSeller(): boolean { return localStorage.getItem('role') === 'seller'; }
   getImageUrl(image: string): string {
+    if (image.startsWith('http')) return image;
     return `http://127.0.0.1:8000${image}`;
   }
 }
