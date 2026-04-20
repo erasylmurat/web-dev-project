@@ -19,6 +19,63 @@ export class Categories implements OnInit {
   newCategory = { name: '', description: '' };
   selectedCategoryImage: File | null = null;
 
+  sections = [
+    {
+      title: 'Electronics',
+      categories: [
+        { id: 1, name: 'Smartphones' },
+        { id: 2, name: 'Laptops' },
+        { id: 3, name: 'Audio & Headphones' },
+        { id: 4, name: 'Accessories' }
+      ]
+    },
+    {
+      title: 'Clothing & Fashion',
+      categories: [
+        { id: 5, name: "Men's Wear" },
+        { id: 6, name: "Women's Wear" },
+        { id: 7, name: 'Shoes' },
+        { id: 8, name: 'Bags' }
+      ]
+    },
+    {
+      title: 'Home & Living',
+      categories: [
+        { id: 9, name: 'Furniture' },
+        { id: 10, name: 'Home Decor' },
+        { id: 11, name: 'Kitchenware' },
+        { id: 12, name: 'Bedding' }
+      ]
+    },
+    {
+      title: 'Hobbies & Art',
+      categories: [
+        { id: 13, name: 'Board Games' },
+        { id: 14, name: 'Musical Instruments' },
+        { id: 15, name: 'Art Supplies' },
+        { id: 16, name: 'Video Games' }
+      ]
+    },
+    {
+      title: 'Beauty & Health',
+      categories: [
+        { id: 17, name: 'Skincare' },
+        { id: 18, name: 'Cosmetics' },
+        { id: 19, name: 'Hair Care' },
+        { id: 20, name: 'Fragrances' }
+      ]
+    },
+    {
+      title: 'Sports',
+      categories: [
+        { id: 21, name: 'Fitness Gear' },
+        { id: 22, name: 'Camping' },
+        { id: 23, name: 'Cycling' },
+        { id: 24, name: 'Sportswear' }
+      ]
+    }
+  ];
+
   constructor(
     private api: ApiService,
     private cdr: ChangeDetectorRef,
