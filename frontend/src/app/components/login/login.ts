@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
   imports: [FormsModule, CommonModule],
   templateUrl: './login.html',
   styleUrl: './login.css'
+  
 })
 export class Login {
   username = '';
@@ -17,27 +18,26 @@ export class Login {
   email = '';
   errorMessage = '';
   isRegister = false;
+  selectedRole = 'buyer';
 
   constructor(private api: ApiService, private router: Router) {}
 
   login() {
-    this.api.login(this.username, this.password).subscribe({
-      next: (res) => {
-        localStorage.setItem('token', res.token);
-        localStorage.setItem('username', res.username);
-        this.router.navigate(['/products']);
-      },
-      error: () => {
-        this.errorMessage = 'Неверный логин или пароль';
-      }
-    });
+  this.api.login(this.username, this.password).subscribe({
+    next: (res) => {
+      this.api.saveUserData(res);
+      this.router.navigate(['/products']);
+    },
+    error: () => {
+      this.errorMessage = 'Неверный логин или пароль';
+    }
+  });
   }
 
   register() {
-    this.api.register(this.username, this.email, this.password).subscribe({
+    this.api.register(this.username, this.email, this.password, this.selectedRole).subscribe({
       next: (res) => {
-        localStorage.setItem('token', res.token);
-        localStorage.setItem('username', res.username);
+        this.api.saveUserData(res);
         this.router.navigate(['/products']);
       },
       error: () => {
@@ -45,6 +45,7 @@ export class Login {
       }
     });
   }
+
 
   toggleMode() {
     this.isRegister = !this.isRegister;

@@ -236,3 +236,76 @@ input, select {
 .toggle-link:hover {
   text-decoration: underline;
 }/* You can add global styles to this file, and also import other style files */
+
+/* Search bar */
+.search-bar {
+  padding: 16px 32px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.search-bar input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+.filter-badge {
+  background: #e8f0fe;
+  color: #2c3e50;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+}
+
+.filter-badge a {
+  color: #e74c3c;
+  margin-left: 6px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+/* Product card image */
+.card-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px 8px 0 0;
+}
+
+.no-image {
+  width: 100%;
+  height: 180px;
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #aaa;
+  border-radius: 8px 8px 0 0;
+  font-size: 14px;
+}
+
+.card-body {
+  padding: 12px;
+}
+
+.discount-badge {
+  background: #e74c3c;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+
+.product-card {
+  position: relative;
+  cursor: pointer;
+}
+

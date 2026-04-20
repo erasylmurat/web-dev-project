@@ -1,0 +1,96 @@
+<div class="detail-container">
+  <nav class="navbar">
+    <h1 routerLink="/products" style="cursor:pointer">QuickCart</h1>
+    <div class="nav-actions">
+      <a routerLink="/products">← Назад</a>
+      @if (isLoggedIn()) {
+        <a routerLink="/cart">Корзина</a>
+      }
+    </div>
+  </nav>
+
+  @if (errorMessage) {
+    <div class="error">{{ errorMessage }}</div>
+  }
+
+  @if (product) {
+    <div class="detail-content">
+      <div class="detail-left">
+        @if (product.image) {
+          <img [src]="getImageUrl(product.image)" [alt]="product.name" class="product-image" />
+        } @else {
+          <div class="no-image">Нет фото</div>
+        }
+      </div>
+
+      <div class="detail-right">
+        <h2>{{ product.name }}</h2>
+        <p class="category-badge">{{ product.category_name }}</p>
+        <p class="seller">Продавец: {{ product.seller_name || 'Не указан' }}</p>
+
+        <div class="stars">
+          @for (star of getStars(product.avg_rating || 0); track $index) {
+            <span>{{ star }}</span>
+          }
+          <span class="rating-num">({{ product.avg_rating || 0 }})</span>
+        </div>
+
+        @if (product.discount && product.discount > 0) {
+          <div class="price-block">
+            <span class="old-price">{{ product.price }} ₸</span>
+            <span class="new-price">{{ product.discounted_price }} ₸</span>
+            <span class="discount-badge">-{{ product.discount }}%</span>
+          </div>
+        } @else {
+          <p class="price">{{ product.price }} ₸</p>
+        }
+
+        <p class="description">{{ product.description }}</p>
+        <p class="stock">В наличии: {{ product.stock }}</p>
+
+        @if (!isSeller()) {
+          <button class="add-to-cart-btn" (click)="addToCart()">В корзину</button>
+        }
+      </div>
+    </div>
+
+    <div class="reviews-section">
+      <h3>Отзывы ({{ product.reviews?.length || 0 }})</h3>
+
+      @if (product.reviews && product.reviews.length > 0) {
+        @for (review of product.reviews; track review.id) {
+          <div class="review-card">
+            <div class="review-header">
+              <strong>{{ review.username }}</strong>
+              <div class="stars">
+                @for (star of getStars(review.rating); track $index) {
+                  <span>{{ star }}</span>
+                }
+              </div>
+            </div>
+            <p>{{ review.comment }}</p>
+          </div>
+        }
+      } @else {
+        <p class="no-reviews">Отзывов пока нет</p>
+      }
+
+      @if (isLoggedIn() && !isSeller()) {
+        <div class="add-review">
+          <h4>Оставить отзыв</h4>
+          @if (reviewError) { <div class="error">{{ reviewError }}</div> }
+          @if (reviewSuccess) { <div class="success">{{ reviewSuccess }}</div> }
+          <select [(ngModel)]="newReview.rating">
+            <option value="1">1 ★</option>
+            <option value="2">2 ★★</option>
+            <option value="3">3 ★★★</option>
+            <option value="4">4 ★★★★</option>
+            <option value="5">5 ★★★★★</option>
+          </select>
+          <textarea [(ngModel)]="newReview.comment" placeholder="Ваш отзыв..."></textarea>
+          <button (click)="submitReview()">Отправить</button>
+        </div>
+      }
+    </div>
+  }
+</div>

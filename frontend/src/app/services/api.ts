@@ -22,8 +22,30 @@ export class ApiService {
     return this.http.post(`${this.baseUrl}/auth/login/`, { username, password });
   }
 
-  register(username: string, email: string, password: string): Observable<any> {
-    return this.http.post(`${this.baseUrl}/auth/register/`, { username, email, password });
+  register(username: string, email: string, password: string, role: string = 'buyer'): Observable<any> {
+    return this.http.post(`${this.baseUrl}/auth/register/`, { username, email, password, role });
+  }
+  // Auth helpers
+  saveUserData(data: any) {
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('username', data.username);
+    localStorage.setItem('role', data.role);
+  }
+
+  getRole(): string {
+    return localStorage.getItem('role') || '';
+  }
+
+  isAdmin(): boolean {
+    return this.getRole() === 'admin';
+  }
+
+  isSeller(): boolean {
+    return this.getRole() === 'seller';
+  }
+
+  isBuyer(): boolean {
+    return this.getRole() === 'buyer';
   }
 
   // Products
@@ -60,4 +82,32 @@ export class ApiService {
   createOrder(items: any[]): Observable<Order> {
     return this.http.post<Order>(`${this.baseUrl}/orders/`, { items }, { headers: this.getHeaders() });
   }
+  // Reviews
+  getReviews(productId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/products/${productId}/reviews/`);
+  }
+
+  addReview(productId: number, data: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/products/${productId}/reviews/`, data, { headers: this.getHeaders() });
+  }
+
+  // Products with filters
+  getProductsByCategory(categoryId: number): Observable<Product[]> {
+    return this.http.get<Product[]>(`${this.baseUrl}/products/?category=${categoryId}`);
+ }
+
+  searchProducts(query: string): Observable<Product[]> {
+    return this.http.get<Product[]>(`${this.baseUrl}/products/?search=${query}`);
+ }
+
+  getDiscountedProducts(): Observable<Product[]> {
+    return this.http.get<Product[]>(`${this.baseUrl}/products/?discount=true`);
+  }
+
+  createProductWithImage(formData: FormData): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({ Authorization: `Token ${token}` });
+    return this.http.post(`${this.baseUrl}/products/`, formData, { headers });
+  }
 }
+

@@ -2,8 +2,13 @@
   <nav class="navbar">
     <h1>QuickCart</h1>
     <div class="nav-actions">
-      <button (click)="goToCart()">Корзина ({{ cart.length }})</button>
+      <a routerLink="/categories">Категории</a>
+      <a routerLink="/products" [queryParams]="{discount: 'true'}">Акции 🔥</a>
+      @if (!isSeller()) {
+        <button (click)="goToCart()">Корзина ({{ cart.length }})</button>
+      }
       @if (isLoggedIn()) {
+        <span class="username">{{ getUsername() }}</span>
         <button (click)="logout()">Выйти</button>
       } @else {
         <a routerLink="/login">Войти</a>
@@ -11,11 +16,24 @@
     </div>
   </nav>
 
+  <div class="search-bar">
+    <input [(ngModel)]="searchQuery" placeholder="Поиск товаров..." (input)="onSearch()" />
+    @if (selectedCategory) {
+      <span class="filter-badge">
+        Категория выбрана
+        <a routerLink="/products">✕</a>
+      </span>
+    }
+    @if (showDiscounted) {
+      <span class="filter-badge">Акции <a routerLink="/products">✕</a></span>
+    }
+  </div>
+
   @if (errorMessage) {
     <div class="error">{{ errorMessage }}</div>
   }
 
-  @if (isLoggedIn()) {
+  @if (isAdmin() || isSeller()) {
     <div class="add-section">
       <button (click)="showForm = !showForm">
         {{ showForm ? 'Отмена' : '+ Добавить продукт' }}
@@ -26,12 +44,14 @@
           <input [(ngModel)]="newProduct.description" placeholder="Описание" />
           <input [(ngModel)]="newProduct.price" placeholder="Цена" type="number" />
           <input [(ngModel)]="newProduct.stock" placeholder="Количество" type="number" />
+          <input [(ngModel)]="newProduct.discount" placeholder="Скидка %" type="number" />
           <select [(ngModel)]="newProduct.category">
             <option value="0">Выберите категорию</option>
             @for (cat of categories; track cat.id) {
               <option [value]="cat.id">{{ cat.name }}</option>
             }
           </select>
+          <input type="file" (change)="onImageSelected($event)" accept="image/*" />
           <button (click)="createProduct()">Сохранить</button>
         </div>
       }
@@ -40,21 +60,41 @@
 
   <div class="products-grid">
     @for (product of products; track product.id) {
-      <div class="product-card">
-        <h3>{{ product.name }}</h3>
-        <p>{{ product.description }}</p>
-        <p class="price">{{ product.price }} ₸</p>
-        <p class="stock">В наличии: {{ product.stock }}</p>
-        <p class="category">{{ product.category_name }}</p>
-        <div class="card-actions">
-          <button (click)="addToCart(product)">В корзину</button>
-          @if (isLoggedIn()) {
-            <button (click)="deleteProduct(product.id!)">Удалить</button>
+      <div class="product-card" (click)="goToProduct(product.id!)">
+        @if (product.image) {
+          <img [src]="getImageUrl(product.image)" [alt]="product.name" class="card-image" />
+        } @else {
+          <div class="no-image">Нет фото</div>
+        }
+        @if (product.discount && product.discount > 0) {
+          <span class="discount-badge">-{{ product.discount }}%</span>
+        }
+        <div class="card-body">
+          <h3>{{ product.name }}</h3>
+          <div class="stars">
+            @for (star of getStars(product.avg_rating || 0); track $index) {
+              <span>{{ star }}</span>
+            }
+          </div>
+          @if (product.discount && product.discount > 0) {
+            <p class="old-price">{{ product.price }} ₸</p>
+            <p class="price">{{ product.discounted_price }} ₸</p>
+          } @else {
+            <p class="price">{{ product.price }} ₸</p>
           }
+          <p class="category">{{ product.category_name }}</p>
+          <div class="card-actions" (click)="$event.stopPropagation()">
+            @if (!isSeller()) {
+              <button (click)="addToCart(product)">В корзину</button>
+            }
+            @if (isAdmin()) {
+              <button class="delete-btn" (click)="deleteProduct(product.id!)">Удалить</button>
+            }
+          </div>
         </div>
       </div>
     } @empty {
-      <p>Продукты не найдены</p>
+      <p class="empty">Товары не найдены</p>
     }
   </div>
 </div>

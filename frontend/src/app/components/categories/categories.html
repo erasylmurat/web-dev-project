@@ -1,0 +1,28 @@
+<div class="categories-container">
+  <nav class="navbar">
+    <h1 routerLink="/products" style="cursor:pointer">QuickCart</h1>
+    <div class="nav-actions">
+      <a routerLink="/products">Все товары</a>
+      <a routerLink="/products" [queryParams]="{discount: 'true'}">Акции</a>
+      @if (isLoggedIn()) {
+        <a routerLink="/cart">Корзина</a>
+      } @else {
+        <a routerLink="/login">Войти</a>
+      }
+    </div>
+  </nav>
+
+  <div class="categories-content">
+    <h2>Категории</h2>
+    <div class="categories-grid">
+      @for (cat of categories; track cat.id) {
+        <div class="category-card" routerLink="/products" [queryParams]="{category: cat.id}">
+          <h3>{{ cat.name }}</h3>
+          <p>{{ cat.description }}</p>
+        </div>
+      } @empty {
+        <p>Категории не найдены</p>
+      }
+    </div>
+  </div>
+</div>

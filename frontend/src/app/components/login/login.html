@@ -5,9 +5,18 @@
 
   <input [(ngModel)]="username" placeholder="Логин" type="text" />
 
-  <input *ngIf="isRegister" [(ngModel)]="email" placeholder="Email" type="email" />
+  @if (isRegister) {
+    <input [(ngModel)]="email" placeholder="Email" type="email" />
+  }
 
   <input [(ngModel)]="password" placeholder="Пароль" type="password" />
+
+  @if (isRegister) {
+    <select [(ngModel)]="selectedRole">
+      <option value="buyer">Покупатель</option>
+      <option value="seller">Продавец</option>
+    </select>
+  }
 
   <button (click)="isRegister ? register() : login()">
     {{ isRegister ? 'Зарегистрироваться' : 'Войти' }}
