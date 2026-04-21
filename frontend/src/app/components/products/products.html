@@ -8,7 +8,9 @@
         <button (click)="goToCart()">{{ tr.t('cart') }} ({{ getCartCount() }})</button>
       }
       @if (isLoggedIn()) {
-        <span class="username">{{ getUsername() }}</span>
+        <span class="username" routerLink="/profile" style="cursor:pointer; text-decoration: underline;">
+          {{ getUsername() }}
+        </span>
         <button (click)="logout()">{{ tr.t('logout') }}</button>
       } @else {
         <a routerLink="/login">{{ tr.t('login') }}</a>

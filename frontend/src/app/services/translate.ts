@@ -51,6 +51,8 @@ export class TranslateService {
       'order': 'Оформить заказ',
       'remove': 'Удалить',
       'order_success': 'Заказ оформлен!',
+      'my_orders': 'Мои заказы',
+      'no_orders': 'У вас еще нет заказов',
     },
     en: {
       'quickcart': 'QuickCart',
@@ -98,6 +100,8 @@ export class TranslateService {
       'order': 'Place order',
       'remove': 'Remove',
       'order_success': 'Order placed!',
+      'my_orders': 'My Orders',
+      'no_orders': 'You have no orders yet',
     }
   };
 

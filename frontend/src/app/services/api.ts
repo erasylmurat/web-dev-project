@@ -12,6 +12,9 @@ export class ApiService {
 
   constructor(private http: HttpClient) {}
 
+  getOrders(): Observable<Order[]> {
+    return this.http.get<Order[]>(`${this.baseUrl}/orders/`);
+  }
   private getHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
     return new HttpHeaders({ Authorization: `Token ${token}` });
@@ -72,11 +75,6 @@ export class ApiService {
   // Categories
   getCategories(): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/categories/`);
-  }
-
-  // Orders
-  getOrders(): Observable<Order[]> {
-    return this.http.get<Order[]>(`${this.baseUrl}/orders/`, { headers: this.getHeaders() });
   }
 
   createOrder(items: any[]): Observable<Order> {
