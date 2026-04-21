@@ -94,7 +94,17 @@ class ProductDetailView(APIView):
         return Response(serializer.errors, status=400)
 
     def delete(self, request, pk):
-        if not request.user.is_staff:
+        from rest_framework.authentication import TokenAuthentication
+        auth = TokenAuthentication()
+        try:
+            user_auth_tuple = auth.authenticate(request)
+            if user_auth_tuple is None:
+                return Response({'error': 'Требуется авторизация'}, status=401)
+            user, token = user_auth_tuple
+        except Exception:
+            return Response({'error': 'Неверный токен'}, status=401)
+        
+        if not user.is_staff:
             return Response({'error': 'Нет прав'}, status=403)
         try:
             product = Product.objects.get(pk=pk)
