@@ -18,19 +18,33 @@
     <p class="empty">{{ tr.t('cart_empty') }}</p>
   } @else {
     <div class="cart-items">
-      @for (item of cartItems; track item.id) {
+      @for (item of cartItems; track item.product.id) {
         <div class="cart-item">
           <div class="item-info">
-            <h3>{{ item.name }}</h3>
-            <p>{{ item.price }} ₸</p>
+            <h3>{{ item.product.name }}</h3>
+            <p class="item-price">
+              {{ item.product.discounted_price ?? item.product.price }} ₸
+              @if (item.product.discount && item.product.discount > 0) {
+                <span class="item-discount">-{{ item.product.discount }}%</span>
+              }
+            </p>
           </div>
-          <button (click)="removeItem($index)">{{ tr.t('remove') }}</button>
+          <div class="quantity-controls">
+            <button class="qty-btn" (click)="decrement($index)">−</button>
+            <span class="qty-value">{{ item.quantity }}</span>
+            <button class="qty-btn" (click)="increment($index)">+</button>
+          </div>
+          <div class="item-total">
+            {{ getItemPrice(item) }} ₸
+          </div>
         </div>
       }
     </div>
     <div class="cart-total">
       <h3>{{ tr.t('total') }}: {{ getTotal() }} ₸</h3>
-      <button class="order-btn" (click)="placeOrder()">{{ tr.t('order') }}</button>
+      <button class="order-btn" (click)="placeOrder()" [disabled]="isOrdering">
+          {{ tr.t('order') }}
+      </button>
     </div>
   }
 </div>
