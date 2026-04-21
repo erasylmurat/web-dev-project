@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ApiService } from '../../services/api';
@@ -18,7 +18,7 @@ export class Cart implements OnInit {
   successMessage = '';
   isOrdering = false;
 
-  constructor(private api: ApiService, private router: Router, public tr: TranslateService) {}
+  constructor(private api: ApiService, private router: Router, public tr: TranslateService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
     if (!localStorage.getItem('token')) {
@@ -30,7 +30,6 @@ export class Cart implements OnInit {
 
   loadCart() {
     const raw: Product[] = JSON.parse(localStorage.getItem('cart') || '[]');
-    // Группируем одинаковые товары
     const map = new Map<number, { product: Product; quantity: number }>();
     raw.forEach(p => {
       if (map.has(p.id!)) {
@@ -43,7 +42,6 @@ export class Cart implements OnInit {
   }
 
   saveCart() {
-    // Разворачиваем обратно в плоский массив для localStorage
     const raw: Product[] = [];
     this.cartItems.forEach(item => {
       for (let i = 0; i < item.quantity; i++) {
@@ -54,17 +52,21 @@ export class Cart implements OnInit {
   }
 
   increment(index: number) {
-    this.cartItems[index].quantity++;
-    this.saveCart();
+    if (index < this.cartItems.length) {
+      this.cartItems[index].quantity++;
+      this.saveCart();
+    }
   }
 
   decrement(index: number) {
-    if (this.cartItems[index].quantity > 1) {
-      this.cartItems[index].quantity--;
-    } else {
-      this.cartItems.splice(index, 1);
+    if (index < this.cartItems.length) {
+      if (this.cartItems[index].quantity > 1) {
+        this.cartItems[index].quantity--;
+      } else {
+        this.cartItems.splice(index, 1);
+      }
+      this.saveCart();
     }
-    this.saveCart();
   }
 
   getItemPrice(item: { product: Product; quantity: number }): number {
@@ -77,25 +79,27 @@ export class Cart implements OnInit {
   }
 
   placeOrder() {
-  if (this.isOrdering) return;
-  this.isOrdering = true;
-  this.errorMessage = '';
-  const items = this.cartItems.map(item => ({
-    product_id: item.product.id,
-    quantity: item.quantity
-  }));
-  this.api.createOrder(items).subscribe({
-    next: () => {
-      this.cartItems = [];
-      localStorage.removeItem('cart');
-      this.isOrdering = false;
-      this.successMessage = 'Заказ оформлен! ✓';
-    },
-    error: () => {
-      this.errorMessage = 'Ошибка оформления заказа';
-      this.isOrdering = false;
-    }
-  });
+    if (this.isOrdering || this.cartItems.length === 0) return;
+    this.isOrdering = true;
+    this.errorMessage = '';
+    const items = this.cartItems.map(item => ({
+      product_id: item.product.id,
+      quantity: item.quantity
+    }));
+    this.api.createOrder(items).subscribe({
+      next: () => {
+        this.cartItems = [];
+        localStorage.removeItem('cart');
+        this.isOrdering = false;
+        this.successMessage = 'Заказ оформлен! ✓';
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        this.errorMessage = 'Ошибка оформления заказа';
+        this.isOrdering = false;
+        this.cdr.detectChanges();
+      }
+    });
   }
 
   goBack() {
