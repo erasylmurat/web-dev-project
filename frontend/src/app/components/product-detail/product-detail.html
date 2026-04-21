@@ -24,36 +24,80 @@
       </div>
 
       <div class="detail-right">
-        <h2>{{ product.name }}</h2>
-        <p class="category-badge">{{ product.category_name }}</p>
-        <p class="seller">Продавец: {{ product.seller_name || 'Не указан' }}</p>
-
-        <div class="stars">
-          @for (star of getStars(product.avg_rating || 0); track $index) {
-            <span>{{ star }}</span>
-          }
-          <span class="rating-num">({{ product.avg_rating || 0 }})</span>
-        </div>
-
-        @if (product.discount && product.discount > 0) {
-          <div class="price-block">
-            <span class="old-price">{{ product.price }} ₸</span>
-            <span class="new-price">{{ product.discounted_price }} ₸</span>
-            <span class="discount-badge">-{{ product.discount }}%</span>
+        @if (isLoggedIn() && (isAdmin() || isOwner())) {
+          <div class="admin-controls">
+            @if (!isEditing) {
+              <button class="btn-edit-trigger" (click)="enableEdit()">
+                <i class="edit-icon">✎</i> Редактировать товар
+              </button>
+            }
           </div>
-        } @else {
-          <p class="price">{{ product.price }} ₸</p>
         }
 
-        <p class="description">{{ product.description }}</p>
+        @if (!isEditing) {
+          <h2>{{ product.name }}</h2>
+          <p class="category-badge">{{ product.category_name }}</p>
+          <p class="seller">Продавец: {{ product.seller_name || 'Не указан' }}</p>
 
-        @if (!isSeller()) {
-          @if (cartMessage) {
-            <div style="color:#27ae60; font-weight:600; padding: 8px 0;">✓ {{ cartMessage }}</div>
+          <div class="stars">
+            @for (star of getStars(product.avg_rating || 0); track $index) {
+              <span>{{ star }}</span>
+            }
+            <span class="rating-num">({{ product.avg_rating || 0 }})</span>
+          </div>
+
+          @if (product.discount && product.discount > 0) {
+            <div class="price-block">
+              <span class="old-price">{{ product.price }} ₸</span>
+              <span class="new-price">{{ product.discounted_price }} ₸</span>
+              <span class="discount-badge">-{{ product.discount }}%</span>
+            </div>
+          } @else {
+            <p class="price">{{ product.price }} ₸</p>
           }
-          <button class="add-to-cart-btn" (click)="addToCart()">
-            {{ isLoggedIn() ? 'Добавить в корзину' : 'Войдите чтобы купить' }}
-          </button>
+
+          <p class="description">{{ product.description }}</p>
+
+          @if (!isSeller()) {
+            @if (cartMessage) {
+              <div class="success-msg">✓ {{ cartMessage }}</div>
+            }
+            <button class="add-to-cart-btn" (click)="addToCart()">
+              {{ isLoggedIn() ? 'Добавить в корзину' : 'Войдите чтобы купить' }}
+            </button>
+          }
+        } 
+        
+        @else {
+          <div class="edit-form-container">
+            <h4 class="edit-title">Редактирование деталей</h4>
+            
+            <div class="form-group">
+              <label>Название товара</label>
+              <input [(ngModel)]="editProductData.name" placeholder="Введите название">
+            </div>
+            
+            <div class="form-row">
+              <div class="form-group">
+                <label>Цена (₸)</label>
+                <input [(ngModel)]="editProductData.price" type="number">
+              </div>
+              <div class="form-group">
+                <label>Скидка (%)</label>
+                <input [(ngModel)]="editProductData.discount" type="number">
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label>Описание</label>
+              <textarea [(ngModel)]="editProductData.description" rows="5" placeholder="Описание товара"></textarea>
+            </div>
+            
+            <div class="edit-actions">
+              <button class="btn-save" (click)="saveChanges()">Сохранить</button>
+              <button class="btn-cancel" (click)="cancelEdit()">Отмена</button>
+            </div>
+          </div>
         }
       </div>
     </div>

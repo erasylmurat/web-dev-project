@@ -17,7 +17,8 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  ""
+                  "const res = pm.response.json();",
+                  "pm.environment.set(\"token\", res.token);"
                 ],
                 "type": "text/javascript",
                 "packages": {},
@@ -27,8 +28,12 @@
             {
               "listen": "prerequest",
               "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
                 "packages": {},
-                "type": "text/javascript"
+                "requests": {}
               }
             }
           ],
@@ -37,7 +42,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"username\": \"admin\",\n    \"password\": \"admin123\"\n}",
+              "raw": "{\n    \"username\": \"testbuyer\",\n    \"password\": \"test123\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -154,7 +159,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"username\": \"newuser_test\",\n    \"email\": \"test@example.com\",\n    \"password\": \"testpassword123\",\n    \"role\": \"buyer\" \n}",
+              "raw": "{\n    \"username\": \"newadmin_test\",\n    \"email\": \"admin@example.com\",\n    \"password\": \"testpadmin123\",\n    \"role\": \"admin\" \n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -692,6 +697,133 @@
               "body": "{\n    \"id\": 7,\n    \"name\": \"Samsung S20\",\n    \"description\": \"Good camera, 'better then Iphone'\",\n    \"price\": \"500000.00\",\n    \"discounted_price\": 500000,\n    \"stock\": 0,\n    \"category\": 1,\n    \"category_name\": \"Electronics\",\n    \"seller_name\": \"admin\",\n    \"image\": null,\n    \"discount\": 0,\n    \"reviews\": [],\n    \"avg_rating\": 0,\n    \"created_at\": \"2026-04-21T02:29:59.908531Z\"\n}"
             }
           ]
+        },
+        {
+          "name": "update",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Token de5d93ee300d6772bc6b49019faef6d24e4745db",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"LEGO Classic Set\",\n    \"description\": \"Creative\",\n    \"price\": \"12000.00\",\n    \"discounted_price\": 12000.0,\n    \"category\": 12,\n    \"category_name\": \"Toys\",\n    \"seller_name\": \"testseller\",\n    \"discount\": 0,\n    \"reviews\": [],\n    \"avg_rating\": 0,\n    \"created_at\": \"2026-04-21T03:26:13.520183Z\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://127.0.0.1:8000/api/products/36/",
+              "protocol": "http",
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "port": "8000",
+              "path": [
+                "api",
+                "products",
+                "36",
+                ""
+              ]
+            }
+          },
+          "response": [
+            {
+              "name": "update",
+              "originalRequest": {
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Token de5d93ee300d6772bc6b49019faef6d24e4745db",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"LEGO Classic Set\",\n    \"description\": \"Creative\",\n    \"price\": \"12000.00\",\n    \"discounted_price\": 12000.0,\n    \"category\": 12,\n    \"category_name\": \"Toys\",\n    \"seller_name\": \"testseller\",\n    \"discount\": 0,\n    \"reviews\": [],\n    \"avg_rating\": 0,\n    \"created_at\": \"2026-04-21T03:26:13.520183Z\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://127.0.0.1:8000/api/products/36/",
+                  "protocol": "http",
+                  "host": [
+                    "127",
+                    "0",
+                    "0",
+                    "1"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "api",
+                    "products",
+                    "36",
+                    ""
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Tue, 21 Apr 2026 11:20:48 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "WSGIServer/0.2 CPython/3.14.3"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept, origin"
+                },
+                {
+                  "key": "Allow",
+                  "value": "GET, PUT, DELETE, HEAD, OPTIONS"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "345"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"id\": 36,\n    \"name\": \"LEGO Classic Set\",\n    \"description\": \"Creative\",\n    \"price\": \"12000.00\",\n    \"discounted_price\": 12000,\n    \"category\": 12,\n    \"category_name\": \"Toys\",\n    \"seller_name\": \"testseller\",\n    \"image\": \"http://127.0.0.1:8000/media/products/220881174_w300_h300_11030-lego-classic.webp\",\n    \"discount\": 0,\n    \"reviews\": [],\n    \"avg_rating\": 0,\n    \"created_at\": \"2026-04-21T03:26:13.520183Z\"\n}"
+            }
+          ]
         }
       ]
     },
@@ -792,14 +924,6 @@
               "body": "[\n    {\n        \"id\": 1,\n        \"name\": \"Electronics\",\n        \"description\": \"\",\n        \"image\": null\n    },\n    {\n        \"id\": 2,\n        \"name\": \"Clothing\",\n        \"description\": \"\",\n        \"image\": null\n    },\n    {\n        \"id\": 3,\n        \"name\": \"Food\",\n        \"description\": \"\",\n        \"image\": null\n    },\n    {\n        \"id\": 4,\n        \"name\": \"Toys\",\n        \"description\": \"?\",\n        \"image\": \"/media/categories/shutterstock_383521510-002-scaled.jpg\"\n    }\n]"
             }
           ]
-        },
-        {
-          "name": "create category",
-          "request": {
-            "method": "GET",
-            "header": []
-          },
-          "response": []
         }
       ]
     },
@@ -935,6 +1059,93 @@
               ],
               "cookie": [],
               "body": "{\n    \"id\": 4,\n    \"username\": \"testbuyer\",\n    \"rating\": 5,\n    \"comment\": \"Отличный товар\",\n    \"created_at\": \"2026-04-21T02:33:29.545848Z\"\n}"
+            },
+            {
+              "name": "Add Review",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Token 5b172413206919c35d50d6357d509486c8e4f619",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"rating\": 5,\n    \"comment\": \"Отличный товар\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://127.0.0.1:8000/api/products/12/reviews/",
+                  "protocol": "http",
+                  "host": [
+                    "127",
+                    "0",
+                    "0",
+                    "1"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "api",
+                    "products",
+                    "12",
+                    "reviews",
+                    ""
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Tue, 21 Apr 2026 04:24:50 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "WSGIServer/0.2 CPython/3.14.3"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept, origin"
+                },
+                {
+                  "key": "Allow",
+                  "value": "GET, POST, HEAD, OPTIONS"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "125"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"id\": 6,\n    \"username\": \"testbuyer\",\n    \"rating\": 5,\n    \"comment\": \"Отличный товар\",\n    \"created_at\": \"2026-04-21T04:24:50.156722Z\"\n}"
             }
           ]
         }

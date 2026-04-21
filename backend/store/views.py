@@ -83,11 +83,24 @@ class ProductDetailView(APIView):
         return Response(serializer.data)
 
     def put(self, request, pk):
+        
+        if not request.user.is_authenticated:
+            return Response({'error': 'Требуется авторизация'}, status=401)
+        
         try:
             product = Product.objects.get(pk=pk)
         except Product.DoesNotExist:
             return Response({'error': 'Not found'}, status=404)
-        serializer = ProductSerializer(product, data=request.data, context={'request': request})
+
+        
+        is_admin = request.user.is_staff
+        is_owner = getattr(product, 'seller', None) == request.user
+        
+        if not (is_admin or is_owner):
+            return Response({'error': 'Нет прав на редактирование этого товара'}, status=403)
+
+       
+        serializer = ProductSerializer(product, data=request.data, context={'request': request}, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)

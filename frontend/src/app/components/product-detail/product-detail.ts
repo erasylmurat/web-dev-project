@@ -20,6 +20,8 @@ export class ProductDetail implements OnInit {
   reviewError = '';
   reviewSuccess = '';
   canReview = false;
+  isEditing = false;
+  editProductData: any = {};
 
   constructor(
     private api: ApiService,
@@ -32,6 +34,36 @@ export class ProductDetail implements OnInit {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) this.loadProduct(+id);
   }
+  enableEdit() {
+  this.isEditing = true;
+  this.editProductData = { ...this.product }; 
+  }
+
+  cancelEdit() {
+    this.isEditing = false;
+  }
+
+  saveChanges() {
+    if (!this.product?.id) return;
+    
+    this.api.updateProduct(this.product.id, this.editProductData).subscribe({
+      next: (updated) => {
+        this.product = updated;
+        this.isEditing = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => alert(err.error?.error || 'Ошибка при обновлении')
+    });
+  }
+
+
+  isAdmin(): boolean { return localStorage.getItem('role') === 'admin'; }
+
+
+  isOwner(): boolean { 
+    return this.product?.seller_name === localStorage.getItem('username'); 
+  }
+  
 
   loadProduct(id: number) {
     this.api.getProduct(id).subscribe({
@@ -52,14 +84,14 @@ export class ProductDetail implements OnInit {
     this.api.getOrders().subscribe({
       next: (orders) => {
         const productId = this.product!.id;
-        // Считаем сколько раз купил
+        
         let purchaseCount = 0;
         orders.forEach(order => {
           order.items.forEach((item: any) => {
             if (item.product === productId) purchaseCount++;
           });
         });
-        // Считаем сколько отзывов уже оставил
+        
         const myReviews = (this.product!.reviews || []).filter(
           r => r.username === localStorage.getItem('username')
         ).length;
