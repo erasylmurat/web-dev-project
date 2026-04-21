@@ -143,7 +143,7 @@ All protected routes require `Authorization: Token <token>` header.
 **Login Request/Response**:
 ```json
 // POST /api/auth/login/
-{ "username": "testbuyer", "password": "admin123" }
+{ "username": "testbuyer", "password": "test123" }
 
 // 200 OK
 { "token": "abc123...", "role": "buyer", "username": "testbuyer" }
@@ -278,7 +278,7 @@ python3 manage.py runserver
 cd frontend
 npm install
 ng serve
-# Frontend available at http://localhost:4200
+# Frontend available at http://localhost:4200/categories/
 ```
 
 ### 4. Default Users
