@@ -462,8 +462,16 @@
         {
           "name": "Removing a product",
           "request": {
+            "auth": {
+              "type": "noauth"
+            },
             "method": "DELETE",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Token de5d93ee300d6772bc6b49019faef6d24e4745db"
+              }
+            ],
             "url": {
               "raw": "http://127.0.0.1:8000/api/products/6/",
               "protocol": "http",
@@ -482,13 +490,95 @@
               ]
             }
           },
-          "response": []
+          "response": [
+            {
+              "name": "Removing a product",
+              "originalRequest": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Token de5d93ee300d6772bc6b49019faef6d24e4745db"
+                  }
+                ],
+                "url": {
+                  "raw": "http://127.0.0.1:8000/api/products/6/",
+                  "protocol": "http",
+                  "host": [
+                    "127",
+                    "0",
+                    "0",
+                    "1"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "api",
+                    "products",
+                    "6",
+                    ""
+                  ]
+                }
+              },
+              "status": "No Content",
+              "code": 204,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Tue, 21 Apr 2026 02:29:30 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "WSGIServer/0.2 CPython/3.14.3"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept, origin"
+                },
+                {
+                  "key": "Allow",
+                  "value": "GET, PUT, DELETE, HEAD, OPTIONS"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "0"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": null
+            }
+          ]
         },
         {
           "name": "Product creation",
           "request": {
+            "auth": {
+              "type": "noauth"
+            },
             "method": "POST",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Token de5d93ee300d6772bc6b49019faef6d24e4745db",
+                "type": "text"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n    \"name\": \"Samsung S20\",\n    \"description\": \"Good camera, 'better then Iphone'\",\n    \"price\": 500000,\n    \"category\": 1\n}",
@@ -515,7 +605,93 @@
               ]
             }
           },
-          "response": []
+          "response": [
+            {
+              "name": "Product creation",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Token de5d93ee300d6772bc6b49019faef6d24e4745db",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"Samsung S20\",\n    \"description\": \"Good camera, 'better then Iphone'\",\n    \"price\": 500000,\n    \"category\": 1\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://127.0.0.1:8000/api/products/",
+                  "protocol": "http",
+                  "host": [
+                    "127",
+                    "0",
+                    "0",
+                    "1"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "api",
+                    "products",
+                    ""
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Tue, 21 Apr 2026 02:29:59 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "WSGIServer/0.2 CPython/3.14.3"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept, origin"
+                },
+                {
+                  "key": "Allow",
+                  "value": "GET, POST, HEAD, OPTIONS"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "299"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"id\": 7,\n    \"name\": \"Samsung S20\",\n    \"description\": \"Good camera, 'better then Iphone'\",\n    \"price\": \"500000.00\",\n    \"discounted_price\": 500000,\n    \"stock\": 0,\n    \"category\": 1,\n    \"category_name\": \"Electronics\",\n    \"seller_name\": \"admin\",\n    \"image\": null,\n    \"discount\": 0,\n    \"reviews\": [],\n    \"avg_rating\": 0,\n    \"created_at\": \"2026-04-21T02:29:59.908531Z\"\n}"
+            }
+          ]
         }
       ]
     },
@@ -616,6 +792,14 @@
               "body": "[\n    {\n        \"id\": 1,\n        \"name\": \"Electronics\",\n        \"description\": \"\",\n        \"image\": null\n    },\n    {\n        \"id\": 2,\n        \"name\": \"Clothing\",\n        \"description\": \"\",\n        \"image\": null\n    },\n    {\n        \"id\": 3,\n        \"name\": \"Food\",\n        \"description\": \"\",\n        \"image\": null\n    },\n    {\n        \"id\": 4,\n        \"name\": \"Toys\",\n        \"description\": \"?\",\n        \"image\": \"/media/categories/shutterstock_383521510-002-scaled.jpg\"\n    }\n]"
             }
           ]
+        },
+        {
+          "name": "create category",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
         }
       ]
     },
@@ -626,17 +810,16 @@
           "name": "Add Review",
           "request": {
             "auth": {
-              "type": "bearer",
-              "bearer": [
-                {
-                  "key": "token",
-                  "value": "de5d93ee300d6772bc6b49019faef6d24e4745db",
-                  "type": "string"
-                }
-              ]
+              "type": "noauth"
             },
             "method": "POST",
-            "header": [],
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Token de5d93ee300d6772bc6b49019faef6d24e4745db",
+                "type": "text"
+              }
+            ],
             "body": {
               "mode": "raw",
               "raw": "{\n    \"rating\": 5,\n    \"comment\": \"Отличный товар\"\n}",
@@ -665,7 +848,95 @@
               ]
             }
           },
-          "response": []
+          "response": [
+            {
+              "name": "Add Review",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "Token 5b172413206919c35d50d6357d509486c8e4f619",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"rating\": 5,\n    \"comment\": \"Отличный товар\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "http://127.0.0.1:8000/api/products/2/reviews/",
+                  "protocol": "http",
+                  "host": [
+                    "127",
+                    "0",
+                    "0",
+                    "1"
+                  ],
+                  "port": "8000",
+                  "path": [
+                    "api",
+                    "products",
+                    "2",
+                    "reviews",
+                    ""
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "_postman_previewlanguage": null,
+              "header": [
+                {
+                  "key": "Date",
+                  "value": "Tue, 21 Apr 2026 02:33:29 GMT"
+                },
+                {
+                  "key": "Server",
+                  "value": "WSGIServer/0.2 CPython/3.14.3"
+                },
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                },
+                {
+                  "key": "Vary",
+                  "value": "Accept, origin"
+                },
+                {
+                  "key": "Allow",
+                  "value": "GET, POST, HEAD, OPTIONS"
+                },
+                {
+                  "key": "X-Frame-Options",
+                  "value": "DENY"
+                },
+                {
+                  "key": "Content-Length",
+                  "value": "125"
+                },
+                {
+                  "key": "X-Content-Type-Options",
+                  "value": "nosniff"
+                },
+                {
+                  "key": "Referrer-Policy",
+                  "value": "same-origin"
+                },
+                {
+                  "key": "Cross-Origin-Opener-Policy",
+                  "value": "same-origin"
+                }
+              ],
+              "cookie": [],
+              "body": "{\n    \"id\": 4,\n    \"username\": \"testbuyer\",\n    \"rating\": 5,\n    \"comment\": \"Отличный товар\",\n    \"created_at\": \"2026-04-21T02:33:29.545848Z\"\n}"
+            }
+          ]
         }
       ]
     }
