@@ -12,7 +12,6 @@ export interface Product {
   description: string;
   price: number;
   discounted_price?: number;
-  stock: number;
   category: number;
   category_name?: string;
   seller_name?: string;

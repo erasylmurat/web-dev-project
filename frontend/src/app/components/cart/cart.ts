@@ -19,10 +19,12 @@ export class Cart implements OnInit {
   constructor(private api: ApiService, private router: Router, public tr: TranslateService) {}
 
   ngOnInit() {
-    const saved = localStorage.getItem('cart');
-    if (saved) {
-      this.cartItems = JSON.parse(saved);
+    if (!localStorage.getItem('token')) {
+      this.router.navigate(['/login']);
+      return;
     }
+    const saved = localStorage.getItem('cart');
+    this.cartItems = saved ? JSON.parse(saved) : [];
   }
 
   getTotal(): number {
@@ -34,11 +36,12 @@ export class Cart implements OnInit {
     localStorage.setItem('cart', JSON.stringify(this.cartItems));
   }
 
+  isOrdering = false;
+
   placeOrder() {
-    if (!localStorage.getItem('token')) {
-      this.router.navigate(['/login']);
-      return;
-    }
+    if (this.isOrdering) return;
+    this.isOrdering = true;
+    this.errorMessage = '';
     const items = this.cartItems.map(p => ({
       product_id: p.id,
       quantity: 1
@@ -48,8 +51,12 @@ export class Cart implements OnInit {
         this.successMessage = 'Заказ оформлен!';
         this.cartItems = [];
         localStorage.removeItem('cart');
+        this.isOrdering = false;
       },
-      error: () => this.errorMessage = 'Ошибка оформления заказа'
+      error: () => {
+        this.errorMessage = 'Ошибка оформления заказа';
+        this.isOrdering = false;
+      }
     });
   }
 

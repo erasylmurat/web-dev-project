@@ -4,7 +4,7 @@
     <div class="nav-actions">
       <a routerLink="/products">← Назад</a>
       @if (isLoggedIn()) {
-        <a routerLink="/cart">Корзина</a>
+        <a routerLink="/cart"> Корзина ({{ getCartCount() }})</a>
       }
     </div>
   </nav>
@@ -46,10 +46,14 @@
         }
 
         <p class="description">{{ product.description }}</p>
-        <p class="stock">В наличии: {{ product.stock }}</p>
 
         @if (!isSeller()) {
-          <button class="add-to-cart-btn" (click)="addToCart()">В корзину</button>
+          @if (cartMessage) {
+            <div style="color:#27ae60; font-weight:600; padding: 8px 0;">✓ {{ cartMessage }}</div>
+          }
+          <button class="add-to-cart-btn" (click)="addToCart()">
+            {{ isLoggedIn() ? 'Добавить в корзину' : 'Войдите чтобы купить' }}
+          </button>
         }
       </div>
     </div>
@@ -80,15 +84,21 @@
           <h4>Оставить отзыв</h4>
           @if (reviewError) { <div class="error">{{ reviewError }}</div> }
           @if (reviewSuccess) { <div class="success">{{ reviewSuccess }}</div> }
-          <select [(ngModel)]="newReview.rating">
-            <option value="1">1 ★</option>
-            <option value="2">2 ★★</option>
-            <option value="3">3 ★★★</option>
-            <option value="4">4 ★★★★</option>
-            <option value="5">5 ★★★★★</option>
-          </select>
-          <textarea [(ngModel)]="newReview.comment" placeholder="Ваш отзыв..."></textarea>
-          <button (click)="submitReview()">Отправить</button>
+          @if (canReview) {
+            <select [(ngModel)]="newReview.rating">
+              <option value="1">1 ★</option>
+              <option value="2">2 ★★</option>
+              <option value="3">3 ★★★</option>
+              <option value="4">4 ★★★★</option>
+              <option value="5">5 ★★★★★</option>
+            </select>
+            <textarea [(ngModel)]="newReview.comment" placeholder="Ваш отзыв..."></textarea>
+            <button (click)="submitReview()">Отправить</button>
+          } @else {
+            <p style="color:#999; font-style:italic;">
+              Купите этот товар чтобы оставить отзыв
+            </p>
+          }
         </div>
       }
     </div>

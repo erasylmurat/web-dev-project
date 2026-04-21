@@ -15,14 +15,16 @@ import { Product } from '../../models/product';
 export class ProductDetail implements OnInit {
   product: Product | null = null;
   errorMessage = '';
+  cartMessage = '';
   newReview = { rating: 5, comment: '' };
   reviewError = '';
   reviewSuccess = '';
+  canReview = false;
 
   constructor(
     private api: ApiService,
     private route: ActivatedRoute,
-    private router: Router,
+    public router: Router,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -35,9 +37,36 @@ export class ProductDetail implements OnInit {
     this.api.getProduct(id).subscribe({
       next: (data) => {
         this.product = data;
+        this.checkCanReview();
         this.cdr.detectChanges();
       },
       error: () => this.errorMessage = 'Товар не найден'
+    });
+  }
+
+  checkCanReview() {
+    if (!this.isLoggedIn() || !this.product?.id || this.isSeller()) {
+      this.canReview = false;
+      return;
+    }
+    this.api.getOrders().subscribe({
+      next: (orders) => {
+        const productId = this.product!.id;
+        // Считаем сколько раз купил
+        let purchaseCount = 0;
+        orders.forEach(order => {
+          order.items.forEach((item: any) => {
+            if (item.product === productId) purchaseCount++;
+          });
+        });
+        // Считаем сколько отзывов уже оставил
+        const myReviews = (this.product!.reviews || []).filter(
+          r => r.username === localStorage.getItem('username')
+        ).length;
+        this.canReview = purchaseCount > myReviews;
+        this.cdr.detectChanges();
+      },
+      error: () => { this.canReview = false; }
     });
   }
 
@@ -46,19 +75,25 @@ export class ProductDetail implements OnInit {
   }
 
   addToCart() {
+    if (!this.isLoggedIn()) {
+      this.router.navigate(['/login']);
+      return;
+    }
     if (!this.product) return;
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
     cart.push(this.product);
     localStorage.setItem('cart', JSON.stringify(cart));
-    this.router.navigate(['/cart']);
+    this.cartMessage = 'Добавлено в корзину!';
+    setTimeout(() => this.cartMessage = '', 2000);
   }
 
   submitReview() {
     if (!this.product?.id) return;
-    if (!localStorage.getItem('token')) {
+    if (!this.isLoggedIn()) {
       this.reviewError = 'Войдите чтобы оставить отзыв';
       return;
     }
+    this.reviewError = '';
     this.api.addReview(this.product.id, this.newReview).subscribe({
       next: () => {
         this.reviewSuccess = 'Отзыв добавлен!';
@@ -66,8 +101,14 @@ export class ProductDetail implements OnInit {
         this.newReview = { rating: 5, comment: '' };
         this.loadProduct(this.product!.id!);
       },
-      error: () => this.reviewError = 'Ошибка при добавлении отзыва'
+      error: (err) => {
+        this.reviewError = err?.error?.error || 'Ошибка при добавлении отзыва';
+      }
     });
+  }
+
+  getCartCount(): number {
+    return JSON.parse(localStorage.getItem('cart') || '[]').length;
   }
 
   isLoggedIn(): boolean { return !!localStorage.getItem('token'); }

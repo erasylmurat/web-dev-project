@@ -16,13 +16,12 @@ import { TranslateService } from '../../services/translate';
 export class Products implements OnInit {
   products: Product[] = [];
   categories: any[] = [];
-  cart: Product[] = [];
   errorMessage = '';
   showForm = false;
   searchQuery = '';
   selectedCategory = 0;
   showDiscounted = false;
-  newProduct: Product = { name: '', description: '', price: 0, stock: 0, category: 0, discount: 0 };
+  newProduct: Product = { name: '', description: '', price: 0, category: 0, discount: 0 };
   selectedImage: File | null = null;
 
   constructor(
@@ -79,7 +78,6 @@ export class Products implements OnInit {
     formData.append('name', this.newProduct.name);
     formData.append('description', this.newProduct.description);
     formData.append('price', this.newProduct.price.toString());
-    formData.append('stock', this.newProduct.stock.toString());
     formData.append('category', this.newProduct.category.toString());
     formData.append('discount', (this.newProduct.discount || 0).toString());
     if (this.selectedImage) formData.append('image', this.selectedImage);
@@ -88,14 +86,27 @@ export class Products implements OnInit {
       next: () => {
         this.loadProducts();
         this.showForm = false;
-        this.newProduct = { name: '', description: '', price: 0, stock: 0, category: 0, discount: 0 };
+        this.newProduct = { name: '', description: '', price: 0, category: 0, discount: 0 };
         this.selectedImage = null;
       },
       error: () => this.errorMessage = 'Ошибка создания продукта'
     });
   }
 
-  addToCart(product: Product) { this.cart.push(product); }
+addToCart(product: Product, event: Event) {
+  event.stopPropagation();
+  if (!this.isLoggedIn()) {
+    this.router.navigate(['/login']);
+    return;
+  }
+  const cart: Product[] = JSON.parse(localStorage.getItem('cart') || '[]');
+  cart.push(product);
+  localStorage.setItem('cart', JSON.stringify(cart));
+}
+
+getCartCount(): number {
+  return JSON.parse(localStorage.getItem('cart') || '[]').length;
+}
 
   deleteProduct(id: number) {
     this.api.deleteProduct(id).subscribe({
@@ -104,10 +115,13 @@ export class Products implements OnInit {
     });
   }
 
-  goToCart() {
-    localStorage.setItem('cart', JSON.stringify(this.cart));
-    this.router.navigate(['/cart']);
+goToCart() {
+  if (!this.isLoggedIn()) {
+    this.router.navigate(['/login']);
+    return;
   }
+  this.router.navigate(['/cart']);
+}
 
   goToProduct(id: number) { this.router.navigate(['/products', id]); }
 

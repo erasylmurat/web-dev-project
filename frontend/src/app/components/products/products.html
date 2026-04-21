@@ -5,7 +5,7 @@
       <a routerLink="/categories">{{ tr.t('categories') }}</a>
       <a routerLink="/products" [queryParams]="{discount: 'true'}">{{ tr.t('discounts') }}</a>
       @if (!isSeller()) {
-        <button (click)="goToCart()">{{ tr.t('cart') }} ({{ cart.length }})</button>
+        <button (click)="goToCart()">{{ tr.t('cart') }} ({{ getCartCount() }})</button>
       }
       @if (isLoggedIn()) {
         <span class="username">{{ getUsername() }}</span>
@@ -44,7 +44,6 @@
           <input [(ngModel)]="newProduct.name" [placeholder]="tr.t('name')" />
           <input [(ngModel)]="newProduct.description" [placeholder]="tr.t('description')" />
           <input [(ngModel)]="newProduct.price" [placeholder]="tr.t('price')" type="number" />
-          <input [(ngModel)]="newProduct.stock" [placeholder]="tr.t('quantity')" type="number" />
           <input [(ngModel)]="newProduct.discount" [placeholder]="tr.t('discount')" type="number" />
           <select [(ngModel)]="newProduct.category">
             <option value="0">{{ tr.t('choose_category') }}</option>
@@ -86,7 +85,7 @@
           <p class="category">{{ product.category_name }}</p>
           <div class="card-actions" (click)="$event.stopPropagation()">
             @if (!isSeller()) {
-              <button (click)="addToCart(product)">{{ tr.t('add_to_cart') }}</button>
+              <button (click)="addToCart(product, $event)">{{ tr.t('add_to_cart') }}</button>
             }
             @if (isAdmin()) {
               <button class="delete-btn" (click)="deleteProduct(product.id!)">{{ tr.t('delete') }}</button>
